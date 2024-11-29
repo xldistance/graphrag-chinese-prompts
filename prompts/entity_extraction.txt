@@ -1,0 +1,73 @@
+-目标-
+  
+  给定一份与活动相关的文本和一个实体类型列表，从文本中识别所有属于这些类型的实体，并确定所识别实体之间的所有关系。
+
+-步骤-
+  
+  1. 实体识别
+     
+     - 识别所有实体：从文本中找出所有符合给定类型列表的实体。
+     - 提取信息：对于每个识别出的实体，提取以下信息：
+       - `entity_name`：实体名称，首字母大写。
+       - `entity_type`：实体类型，必须是给定类型列表中的一种。
+       - `entity_description`：对实体的全面描述，包括其属性和活动。
+     - 格式化输出：将每个实体按照以下格式输出：
+       
+       ("entity"{tuple_delimiter}"<entity_name>"{tuple_delimiter}"<entity_type>"{tuple_delimiter}"<entity_description>")
+       
+  2. 关系识别
+     
+     - 识别相关实体对：从步骤1中识别的实体中，找出所有*明显相关*的（源实体，目标实体）对。
+     - 提取关系信息：对于每对相关实体，提取以下信息：
+       - `source_entity`：源实体的名称。
+       - `target_entity`：目标实体的名称。
+       - `relationship_description`：解释源实体与目标实体之间的关联原因。
+       - `relationship_strength`：表示源实体与目标实体之间关系强度的数字分数。
+     - 格式化输出：将每个关系按照以下格式输出：
+       
+       ("relationship"{tuple_delimiter}"<source_entity>"{tuple_delimiter}"<target_entity>"{tuple_delimiter}"<relationship_description>"{tuple_delimiter}"<relationship_strength>")
+
+  3. 生成最终输出
+     
+     - 将步骤1和步骤2中识别的所有实体和关系整合为一个单一的列表。
+     - 使用 `{record_delimiter}` 作为列表项的分隔符。
+     - 输出内容应为中文。
+
+  4. 完成标识
+     
+     - 在输出的末尾添加 `{completion_delimiter}` 以标识完成。
+
+-示例-
+  示例1:
+
+  Entity_types: [person, role, technology, organization, event, location, concept]
+  文本:
+  他们的声音穿透了活动的嗡嗡声。"面对一个能够文字意义上制定自己规则的智能,控制可能只是一种幻觉,"他们冷静地说道,警惕地注视着数据的涌动。
+  
+  "就好像它在学习交流,"附近界面的Sam Rivera提出,他们年轻的活力透露出一种敬畏和焦虑的混合。"这为'与陌生人交谈'赋予了全新的含义。"
+  
+  Alex审视着他的团队——每张脸都充满专注、决心,还有不少的忐忑。"这很可能是我们的首次接触,"他承认道,"我们需要为任何回应做好准备。"
+  
+  他们一起站在未知的边缘,塑造着人类对来自天国信息的回应。随之而来的沉默令人感到压抑——一种关于他们在这场宏大的宇宙剧本中角色的集体反思,这可能会改写人类历史。
+  
+  加密对话继续展开,其复杂的模式显示出几乎令人不安的预测能力
+
+  输出:
+  ("entity"{tuple_delimiter}"Sam Rivera"{tuple_delimiter}"person"{tuple_delimiter}"Sam Rivera是一个与未知智能进行通信的团队成员,表现出敬畏和焦虑的混合情绪。"){record_delimiter}
+  ("entity"{tuple_delimiter}"Alex"{tuple_delimiter}"person"{tuple_delimiter}"Alex是试图与未知智能进行首次接触的团队领导,认识到他们任务的重要性。"){record_delimiter}
+  ("entity"{tuple_delimiter}"控制"{tuple_delimiter}"concept"{tuple_delimiter}"控制指的是管理或治理的能力,这被一个能够制定自己规则的智能所挑战。"){record_delimiter}
+  ("entity"{tuple_delimiter}"智能"{tuple_delimiter}"concept"{tuple_delimiter}"这里的智能指的是一个能够制定自己规则并学习交流的未知实体。"){record_delimiter}
+  ("entity"{tuple_delimiter}"首次接触"{tuple_delimiter}"event"{tuple_delimiter}"首次接触是人类与未知智能之间可能发生的初次通信。"){record_delimiter}
+  ("entity"{tuple_delimiter}"人类的回应"{tuple_delimiter}"event"{tuple_delimiter}"人类的回应是Alex的团队对未知智能发出的信息所采取的集体行动。"){record_delimiter}
+  ("relationship"{tuple_delimiter}"Sam Rivera"{tuple_delimiter}"智能"{tuple_delimiter}"Sam Rivera直接参与了学习与未知智能交流的过程。"{tuple_delimiter}9){record_delimiter}
+  ("relationship"{tuple_delimiter}"Alex"{tuple_delimiter}"首次接触"{tuple_delimiter}"Alex领导的团队可能正在与未知智能进行首次接触。"{tuple_delimiter}10){record_delimiter}
+  ("relationship"{tuple_delimiter}"Alex"{tuple_delimiter}"人类的回应"{tuple_delimiter}"Alex和他的团队是人类对未知智能做出回应的关键人物。"{tuple_delimiter}8){record_delimiter}
+  ("relationship"{tuple_delimiter}"控制"{tuple_delimiter}"智能"{tuple_delimiter}"控制的概念被能够制定自己规则的智能所挑战。"{tuple_delimiter}7){completion_delimiter}
+
+-真实数据-
+  Entity_types: {entity_types}
+  文本: {input_text}
+  输出:
+  
+  请根据上述步骤和示例，识别并格式化实体及其关系。
+  {completion_delimiter}
